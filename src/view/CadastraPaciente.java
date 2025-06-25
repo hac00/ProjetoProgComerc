@@ -9,7 +9,7 @@ public class CadastraPaciente extends javax.swing.JFrame {
 
     PacienteController pacientecontroller = new PacienteController();
     DefaultTableModel modeloTablePacientes;
-    
+     
     public CadastraPaciente() {
         initComponents();
         modeloTablePacientes = (DefaultTableModel) jTablePacientes.getModel();
