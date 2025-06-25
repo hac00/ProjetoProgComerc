@@ -1,6 +1,7 @@
 
 package controller;
 
+import connection.ConnectionFactory;
 import java.sql.Connection;
 
 public class TestaConexao {

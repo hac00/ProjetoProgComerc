@@ -5,7 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;  
-import controller.ConnectionFactory;
+import connection.ConnectionFactory;
 import model.bean.Paciente;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;

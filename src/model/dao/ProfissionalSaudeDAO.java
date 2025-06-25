@@ -4,7 +4,7 @@ package model.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import controller.ConnectionFactory;
+import connection.ConnectionFactory;
 import java.util.ArrayList;
 import model.bean.ProfissionalSaude;
 import java.sql.ResultSet;
