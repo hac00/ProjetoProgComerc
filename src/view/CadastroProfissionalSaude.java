@@ -103,7 +103,6 @@ public class CadastroProfissionalSaude extends javax.swing.JFrame {
         );
 
         jButtonCadastrar.setText("Cadastrar");
-        jButtonCadastrar.setPreferredSize(new java.awt.Dimension(80, 23));
         jButtonCadastrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCadastrarActionPerformed(evt);
