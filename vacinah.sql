@@ -5,7 +5,7 @@
 -- Dumped from database version 16.9
 -- Dumped by pg_dump version 17.4
 
--- Started on 2025-05-28 23:53:04
+-- Started on 2025-07-02 15:09:12
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -57,7 +57,7 @@ CREATE SEQUENCE public.aplicacaovacina_idaplicacaovacina_seq
 ALTER SEQUENCE public.aplicacaovacina_idaplicacaovacina_seq OWNER TO postgres;
 
 --
--- TOC entry 4913 (class 0 OID 0)
+-- TOC entry 4918 (class 0 OID 0)
 -- Dependencies: 216
 -- Name: aplicacaovacina_idaplicacaovacina_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -100,7 +100,7 @@ CREATE SEQUENCE public.paciente_idpaciente_seq
 ALTER SEQUENCE public.paciente_idpaciente_seq OWNER TO postgres;
 
 --
--- TOC entry 4914 (class 0 OID 0)
+-- TOC entry 4919 (class 0 OID 0)
 -- Dependencies: 218
 -- Name: paciente_idpaciente_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -140,7 +140,7 @@ CREATE SEQUENCE public.profissionalsaude_idprofissionalsaude_seq
 ALTER SEQUENCE public.profissionalsaude_idprofissionalsaude_seq OWNER TO postgres;
 
 --
--- TOC entry 4915 (class 0 OID 0)
+-- TOC entry 4920 (class 0 OID 0)
 -- Dependencies: 220
 -- Name: profissionalsaude_idprofissionalsaude_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -180,7 +180,7 @@ CREATE SEQUENCE public.vacina_idvacina_seq
 ALTER SEQUENCE public.vacina_idvacina_seq OWNER TO postgres;
 
 --
--- TOC entry 4916 (class 0 OID 0)
+-- TOC entry 4921 (class 0 OID 0)
 -- Dependencies: 222
 -- Name: vacina_idvacina_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -189,7 +189,39 @@ ALTER SEQUENCE public.vacina_idvacina_seq OWNED BY public.vacina.id;
 
 
 --
--- TOC entry 4750 (class 2604 OID 16419)
+-- TOC entry 223 (class 1259 OID 16524)
+-- Name: view_aplicacao_vacina; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW public.view_aplicacao_vacina AS
+ SELECT av.id AS aplicacao_id,
+    av.data_aplicacao,
+    av.local_aplicacao,
+    p.id AS paciente_id,
+    p.nome AS paciente_nome,
+    p.cpf AS paciente_cpf,
+    p.telefone AS paciente_telefone,
+    p.data_nascimento AS paciente_data_nascimento,
+    p.alergias AS paciente_alergias,
+    p.sexo AS paciente_sexo,
+    ps.id AS profissional_saude_id,
+    ps.nome AS profissional_nome,
+    ps.cpf AS profissional_cpf,
+    ps.registro_profissional AS profissional_registro_profissional,
+    v.id AS vacina_id,
+    v.nome AS vacina_nome,
+    v.fabricante AS vacina_fabricante,
+    v.doses_necessarias AS vacina_doses_necessarias
+   FROM (((public.aplicacao_vacina av
+     JOIN public.paciente p ON ((av.paciente_id = p.id)))
+     JOIN public.profissional_saude ps ON ((av.profissional_saude_id = ps.id)))
+     JOIN public.vacina v ON ((av.vacina_id = v.id)));
+
+
+ALTER VIEW public.view_aplicacao_vacina OWNER TO postgres;
+
+--
+-- TOC entry 4754 (class 2604 OID 16419)
 -- Name: aplicacao_vacina id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -197,7 +229,7 @@ ALTER TABLE ONLY public.aplicacao_vacina ALTER COLUMN id SET DEFAULT nextval('pu
 
 
 --
--- TOC entry 4751 (class 2604 OID 16420)
+-- TOC entry 4755 (class 2604 OID 16420)
 -- Name: paciente id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -205,7 +237,7 @@ ALTER TABLE ONLY public.paciente ALTER COLUMN id SET DEFAULT nextval('public.pac
 
 
 --
--- TOC entry 4752 (class 2604 OID 16421)
+-- TOC entry 4756 (class 2604 OID 16421)
 -- Name: profissional_saude id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -213,7 +245,7 @@ ALTER TABLE ONLY public.profissional_saude ALTER COLUMN id SET DEFAULT nextval('
 
 
 --
--- TOC entry 4753 (class 2604 OID 16422)
+-- TOC entry 4757 (class 2604 OID 16422)
 -- Name: vacina id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -221,7 +253,7 @@ ALTER TABLE ONLY public.vacina ALTER COLUMN id SET DEFAULT nextval('public.vacin
 
 
 --
--- TOC entry 4755 (class 2606 OID 16424)
+-- TOC entry 4759 (class 2606 OID 16424)
 -- Name: aplicacao_vacina aplicacao_vacina_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -230,7 +262,7 @@ ALTER TABLE ONLY public.aplicacao_vacina
 
 
 --
--- TOC entry 4757 (class 2606 OID 16426)
+-- TOC entry 4761 (class 2606 OID 16426)
 -- Name: paciente paciente_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -239,7 +271,7 @@ ALTER TABLE ONLY public.paciente
 
 
 --
--- TOC entry 4759 (class 2606 OID 16428)
+-- TOC entry 4763 (class 2606 OID 16428)
 -- Name: profissional_saude profissionalsaude_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -248,7 +280,7 @@ ALTER TABLE ONLY public.profissional_saude
 
 
 --
--- TOC entry 4761 (class 2606 OID 16430)
+-- TOC entry 4765 (class 2606 OID 16430)
 -- Name: vacina vacina_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -257,7 +289,7 @@ ALTER TABLE ONLY public.vacina
 
 
 --
--- TOC entry 4762 (class 2606 OID 16446)
+-- TOC entry 4766 (class 2606 OID 16446)
 -- Name: aplicacao_vacina fk_aplicacao_vacina_paciente; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -266,7 +298,7 @@ ALTER TABLE ONLY public.aplicacao_vacina
 
 
 --
--- TOC entry 4763 (class 2606 OID 16436)
+-- TOC entry 4767 (class 2606 OID 16436)
 -- Name: aplicacao_vacina fk_aplicacao_vacina_profissional_saude; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -275,7 +307,7 @@ ALTER TABLE ONLY public.aplicacao_vacina
 
 
 --
--- TOC entry 4764 (class 2606 OID 16441)
+-- TOC entry 4768 (class 2606 OID 16441)
 -- Name: aplicacao_vacina fk_aplicacao_vacina_vacina; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -283,7 +315,7 @@ ALTER TABLE ONLY public.aplicacao_vacina
     ADD CONSTRAINT fk_aplicacao_vacina_vacina FOREIGN KEY (vacina_id) REFERENCES public.vacina(id);
 
 
--- Completed on 2025-05-28 23:53:05
+-- Completed on 2025-07-02 15:09:12
 
 --
 -- PostgreSQL database dump complete
