@@ -1,7 +1,7 @@
 package view;
 
-import view.CadastraPaciente;
-import view.CadastroProfissionalSaude;
+import view.CadastraPacienteView;
+import view.CadastroProfissionalSaudeView;
 
 public class InterfacePrincipal extends javax.swing.JFrame {
 
@@ -118,15 +118,15 @@ public class InterfacePrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonPacientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPacientesActionPerformed
-        new CadastraPaciente();
-        CadastraPaciente cadastroPaciente = new CadastraPaciente();
+        new CadastraPacienteView();
+        CadastraPacienteView cadastroPaciente = new CadastraPacienteView();
         cadastroPaciente.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButtonPacientesActionPerformed
 
     private void jButtonProfissionaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonProfissionaisActionPerformed
-        new CadastroProfissionalSaude();
-        CadastroProfissionalSaude cadastroProfissional = new CadastroProfissionalSaude();
+        new CadastroProfissionalSaudeView();
+        CadastroProfissionalSaudeView cadastroProfissional = new CadastroProfissionalSaudeView();
         cadastroProfissional.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButtonProfissionaisActionPerformed

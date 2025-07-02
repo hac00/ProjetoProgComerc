@@ -5,12 +5,12 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Paciente;
 
-public class CadastraPaciente extends javax.swing.JFrame {
+public class CadastraPacienteView extends javax.swing.JFrame {
 
     PacienteController pacientecontroller = new PacienteController();
     DefaultTableModel modeloTablePacientes;
      
-    public CadastraPaciente() {
+    public CadastraPacienteView() {
         initComponents();
         modeloTablePacientes = (DefaultTableModel) jTablePacientes.getModel();
         getListaPaciente();
@@ -341,21 +341,23 @@ public class CadastraPaciente extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CadastraPaciente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CadastraPacienteView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CadastraPaciente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CadastraPacienteView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CadastraPaciente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CadastraPacienteView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CadastraPaciente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CadastraPacienteView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CadastraPaciente().setVisible(true);
+                new CadastraPacienteView().setVisible(true);
             }
         });
     }

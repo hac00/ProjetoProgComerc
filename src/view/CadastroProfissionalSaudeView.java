@@ -5,12 +5,12 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.bean.ProfissionalSaude;
 
-public class CadastroProfissionalSaude extends javax.swing.JFrame {
+public class CadastroProfissionalSaudeView extends javax.swing.JFrame {
     
     ProfissionalSaudeController profissionalcontroller = new ProfissionalSaudeController();
     DefaultTableModel modeloTableProfissionais;
 
-    public CadastroProfissionalSaude() {
+    public CadastroProfissionalSaudeView() {
         initComponents();
         modeloTableProfissionais = (DefaultTableModel) jTableProfissionais.getModel();
         getListaProfissionais();
@@ -253,20 +253,21 @@ public class CadastroProfissionalSaude extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CadastroProfissionalSaude.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CadastroProfissionalSaudeView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CadastroProfissionalSaude.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CadastroProfissionalSaudeView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CadastroProfissionalSaude.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CadastroProfissionalSaudeView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CadastroProfissionalSaude.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CadastroProfissionalSaudeView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CadastroProfissionalSaude().setVisible(true);
+                new CadastroProfissionalSaudeView().setVisible(true);
             }
         });
     }
