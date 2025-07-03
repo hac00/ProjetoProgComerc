@@ -7,7 +7,7 @@ import tablemodel.VacinaTableModel;
 
 public class VacinaView extends javax.swing.JFrame {
 
-    private boolean alterar = false;
+    private boolean alterar = true;
     private int idVacina = 0;
     private Vacina vacina;
     
@@ -47,9 +47,8 @@ public class VacinaView extends javax.swing.JFrame {
     }
     
     private void getListaVacinas(){
-        VacinaView vacinaview = new VacinaView();
-        vacinaview.setVisible(true);
-        this.dispose();
+        tableModel = new VacinaTableModel(vacinaController.read());
+        jTableTabela.setModel(tableModel);
     }
 
     
@@ -90,6 +89,18 @@ public class VacinaView extends javax.swing.JFrame {
             }
         });
 
+        jTextFieldFabricante.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldFabricanteKeyTyped(evt);
+            }
+        });
+
+        jTextFieldDosesNecessarias.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldDosesNecessariasKeyTyped(evt);
+            }
+        });
+
         jComboBoxBusca.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nome", "Fabricante", "Doses" }));
         jComboBoxBusca.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -97,8 +108,15 @@ public class VacinaView extends javax.swing.JFrame {
             }
         });
 
+        jTextFieldBusca.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldBuscaKeyTyped(evt);
+            }
+        });
+
         jButtonCadastrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/add.png"))); // NOI18N
         jButtonCadastrar.setText("Cadastrar");
+        jButtonCadastrar.setEnabled(false);
         jButtonCadastrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCadastrarActionPerformed(evt);
@@ -107,6 +125,7 @@ public class VacinaView extends javax.swing.JFrame {
 
         jButtonAtualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/insert.png"))); // NOI18N
         jButtonAtualizar.setText("Atualizar");
+        jButtonAtualizar.setEnabled(false);
         jButtonAtualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAtualizarActionPerformed(evt);
@@ -115,6 +134,7 @@ public class VacinaView extends javax.swing.JFrame {
 
         jButtonCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cancel.png"))); // NOI18N
         jButtonCancelar.setText("Cancelar");
+        jButtonCancelar.setEnabled(false);
         jButtonCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelarActionPerformed(evt);
@@ -123,6 +143,7 @@ public class VacinaView extends javax.swing.JFrame {
 
         jButtonExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/delete.png"))); // NOI18N
         jButtonExcluir.setText("Excluir");
+        jButtonExcluir.setEnabled(false);
         jButtonExcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonExcluirActionPerformed(evt);
@@ -221,6 +242,7 @@ public class VacinaView extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Não foi possível salvar a vacina", "Erro", JOptionPane.ERROR_MESSAGE);
         }
         this.getListaVacinas();
+        limpaCampos();
     }//GEN-LAST:event_jButtonCadastrarActionPerformed
 
     private void jButtonAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAtualizarActionPerformed
@@ -230,6 +252,7 @@ public class VacinaView extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Não foi possível atualizar a vacina!", "Erro", JOptionPane.ERROR_MESSAGE);
         }
         this.getListaVacinas();
+        limpaCampos();
     }//GEN-LAST:event_jButtonAtualizarActionPerformed
 
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
@@ -243,8 +266,10 @@ public class VacinaView extends javax.swing.JFrame {
 
     private void jTextFieldNomeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldNomeKeyTyped
         if (alterar){
-            jButtonExcluir.setEnabled(false);
+            jButtonCadastrar.setEnabled(true);
             jButtonAtualizar.setEnabled(true);
+            jButtonExcluir.setEnabled(false);
+            jButtonCancelar.setEnabled(true);
         }
     }//GEN-LAST:event_jTextFieldNomeKeyTyped
 
@@ -255,6 +280,7 @@ public class VacinaView extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Não foi possível deletar a vacina!", "Erro", JOptionPane.ERROR_MESSAGE);
         }
         this.getListaVacinas();
+        limpaCampos();
     }//GEN-LAST:event_jButtonExcluirActionPerformed
 
     private void jComboBoxBuscaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxBuscaActionPerformed
@@ -269,10 +295,55 @@ public class VacinaView extends javax.swing.JFrame {
     private void jTableTabelaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableTabelaMouseClicked
         tableModel = (VacinaTableModel) jTableTabela.getModel();
         Vacina vacina = tableModel.getVacina(jTableTabela.getSelectedRow());
-        VacinaView vacinaview = new VacinaView();
-        vacinaview.setVisible(true);
-        this.dispose(); //ERRADO NAO EH PRA ABRIR OUTRA TELA E SIM MOSTRAR OS DADOS NA TELA
+        idVacina = vacina.getId();
+        jTextFieldNome.setText(vacina.getNome());
+        jTextFieldFabricante.setText(vacina.getFabricante());
+        jTextFieldDosesNecessarias.setText(String.valueOf(vacina.getDosesNecessarias()));
+        jButtonExcluir.setEnabled(true);
+        jButtonCadastrar.setEnabled(false);
+        jButtonCadastrar.setEnabled(true);
+        jButtonCancelar.setEnabled(true);
+        this.alterar = true;
     }//GEN-LAST:event_jTableTabelaMouseClicked
+
+    private void jTextFieldBuscaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldBuscaKeyTyped
+        String chave = jTextFieldBusca.getText(); //CORRIGIR!!
+        if (chave.equals("")){
+            chave = String.valueOf(evt.getKeyChar());
+        }else if (evt.getKeyChar() != '\b'){
+            chave = chave + evt.getKeyChar();
+        }
+        switch(jComboBoxBusca.getSelectedIndex()){
+            case 0:
+                tableModel = new VacinaTableModel(vacinaController.getVacinasNome(chave));
+                break;
+            case 1:
+                tableModel = new VacinaTableModel(vacinaController.getVacinasFabricante(chave));
+                break;
+            case 2:
+                tableModel = new VacinaTableModel(vacinaController.getVacinasDoses(Integer.parseInt(chave)));
+                break;
+        }
+        jTableTabela.setModel(tableModel);
+    }//GEN-LAST:event_jTextFieldBuscaKeyTyped
+
+    private void jTextFieldFabricanteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldFabricanteKeyTyped
+        if (alterar){
+            jButtonCadastrar.setEnabled(true);
+            jButtonAtualizar.setEnabled(true);
+            jButtonExcluir.setEnabled(false);
+            jButtonCancelar.setEnabled(true);
+        }
+    }//GEN-LAST:event_jTextFieldFabricanteKeyTyped
+
+    private void jTextFieldDosesNecessariasKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldDosesNecessariasKeyTyped
+       if (alterar){
+            jButtonCadastrar.setEnabled(true);
+            jButtonAtualizar.setEnabled(true);
+            jButtonExcluir.setEnabled(false);
+            jButtonCancelar.setEnabled(true);
+        }
+    }//GEN-LAST:event_jTextFieldDosesNecessariasKeyTyped
 
     /**
      * @param args the command line arguments
