@@ -2,18 +2,46 @@ package view;
 
 import controller.PacienteController;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 import model.bean.Paciente;
+import tablemodel.PacienteTableModel;
 
-public class CadastraPacienteView extends javax.swing.JFrame {
+public class PacienteView extends javax.swing.JFrame {
 
-    PacienteController pacientecontroller = new PacienteController();
-    DefaultTableModel modeloTablePacientes;
+    private boolean alterar = true;
+    private int idPaciente = 0;
+    private Paciente paciente;
+    
+    PacienteTableModel tableModel;
+    PacienteController pacienteController = new PacienteController();
      
-    public CadastraPacienteView() {
+    public PacienteView() {
         initComponents();
-        modeloTablePacientes = (DefaultTableModel) jTablePacientes.getModel();
-        getListaPaciente();
+        
+        if (paciente != null){
+            preencheCampos(paciente);
+            this.paciente = paciente;
+        }else{
+            jTextFieldNome.requestFocus();
+        }
+        
+        tableModel = new PacienteTableModel(pacienteController.read());
+        
+        jTablePacientes.setModel(tableModel);
+
+    }
+    
+    private void preencheCampos(Paciente paciente){
+        this.idPaciente = paciente.getId();
+        jTextFieldNome.setText(paciente.getNome());
+        jFormattedTextFieldTelefone.setText(paciente.getTelefone());
+        jFormattedTextFieldDataNascimento.setText(paciente.getDataNascimento());
+        jTextFieldAlergias.setText(paciente.getAlergias());
+        jFormattedTextFieldCpf.setText(paciente.getCpf());
+        buttonGroupSexo.clearSelection();//?
+        btnCadastrar.setEnabled(false);
+        btnCadastrar.setEnabled(false);
+        btnExcluir.setEnabled(true);
+        this.alterar = true;        
     }
     
     private void limpaCampos(){
@@ -26,20 +54,9 @@ public class CadastraPacienteView extends javax.swing.JFrame {
         jTextFieldNome.requestFocus();
     }
     
-    public void getListaPaciente(){
-        modeloTablePacientes = (DefaultTableModel) jTablePacientes.getModel();
-        modeloTablePacientes.setNumRows(0);
-        
-        for(Paciente p : pacientecontroller.read()){
-            modeloTablePacientes.addRow(new Object[]{
-                p.getId(),
-                p.getNome(),
-                p.getCpf(),
-                p.getSexo(),
-                p.getDataNascimento(),
-                p.getTelefone(),
-                p.getAlergias(),});
-        }
+    public void getListaPacientes(){
+        tableModel = new PacienteTableModel(pacienteController.read());
+        jTablePacientes.setModel(tableModel);
     }
     
     @SuppressWarnings("unchecked")
@@ -67,6 +84,9 @@ public class CadastraPacienteView extends javax.swing.JFrame {
         btnExcluir = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTablePacientes = new javax.swing.JTable();
+        btnCancelar = new javax.swing.JButton();
+        cbBusca = new javax.swing.JComboBox<>();
+        jTextFieldBusca = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(862, 950));
@@ -88,6 +108,12 @@ public class CadastraPacienteView extends javax.swing.JFrame {
         jLabelDataNascimento.setText("Data Nascimento");
 
         jLabelTelefone.setText("Telefone");
+
+        jTextFieldNome.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldNomeKeyTyped(evt);
+            }
+        });
 
         try {
             jFormattedTextFieldCpf.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###-##")));
@@ -113,21 +139,27 @@ public class CadastraPacienteView extends javax.swing.JFrame {
         buttonGroupSexo.add(jRadioButtonFeminino);
         jRadioButtonFeminino.setText("Feminino");
 
+        btnCadastrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/add.png"))); // NOI18N
         btnCadastrar.setText("Cadastrar");
+        btnCadastrar.setEnabled(false);
         btnCadastrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCadastrarActionPerformed(evt);
             }
         });
 
+        btnAtualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/insert.png"))); // NOI18N
         btnAtualizar.setText("Atualizar");
+        btnAtualizar.setEnabled(false);
         btnAtualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAtualizarActionPerformed(evt);
             }
         });
 
+        btnExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/delete.png"))); // NOI18N
         btnExcluir.setText("Excluir");
+        btnExcluir.setEnabled(false);
         btnExcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExcluirActionPerformed(evt);
@@ -139,10 +171,37 @@ public class CadastraPacienteView extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Nome", "CPF", "Sexo", "Data Nascimento", "Telefone", "Alergias"
+
             }
         ));
+        jTablePacientes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTablePacientesMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTablePacientes);
+
+        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cancel.png"))); // NOI18N
+        btnCancelar.setText("Cancelar");
+        btnCancelar.setEnabled(false);
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+
+        cbBusca.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nome", "CPF", "Sexo" }));
+        cbBusca.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbBuscaActionPerformed(evt);
+            }
+        });
+
+        jTextFieldBusca.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldBuscaKeyTyped(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -159,34 +218,42 @@ public class CadastraPacienteView extends javax.swing.JFrame {
                         .addComponent(jLabelCadastro))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(21, 21, 21)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelNome)
-                            .addComponent(jTextFieldNome, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jRadioButtonMasculino)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jRadioButtonFeminino))
-                            .addComponent(jLabelSexo))
-                        .addGap(49, 49, 49)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jFormattedTextFieldCpf)
-                            .addComponent(jLabelCpf)
-                            .addComponent(jLabelTelefone)
-                            .addComponent(jFormattedTextFieldTelefone, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE))
-                        .addGap(27, 27, 27)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelDataNascimento)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabelAlergias)
-                                .addComponent(jTextFieldAlergias)
-                                .addComponent(jFormattedTextFieldDataNascimento, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(73, 73, 73)
-                        .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(76, 76, 76)
-                        .addComponent(btnAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(57, 57, 57)
-                        .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(cbBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextFieldBusca))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabelNome)
+                                    .addComponent(jTextFieldNome, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jRadioButtonMasculino)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jRadioButtonFeminino))
+                                    .addComponent(jLabelSexo))
+                                .addGap(49, 49, 49)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jFormattedTextFieldCpf)
+                                    .addComponent(jLabelCpf)
+                                    .addComponent(jLabelTelefone)
+                                    .addComponent(jFormattedTextFieldTelefone, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE))
+                                .addGap(27, 27, 27)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabelDataNascimento)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jLabelAlergias)
+                                        .addComponent(jTextFieldAlergias)
+                                        .addComponent(jFormattedTextFieldDataNascimento, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(34, 34, 34)
+                                .addComponent(btnAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                                .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(50, 50, 50)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -215,14 +282,19 @@ public class CadastraPacienteView extends javax.swing.JFrame {
                     .addComponent(jRadioButtonMasculino)
                     .addComponent(jRadioButtonFeminino)
                     .addComponent(jFormattedTextFieldTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(86, 86, 86)
+                .addGap(33, 33, 33)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(31, 31, 31)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(64, 64, 64)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -270,13 +342,13 @@ public class CadastraPacienteView extends javax.swing.JFrame {
             return;
         }
         //executa botao cadastar
-        if (pacientecontroller.create(jFormattedTextFieldTelefone.getText(),
+        if (pacienteController.create(jFormattedTextFieldTelefone.getText(),
             jFormattedTextFieldDataNascimento.getText(),
             jTextFieldAlergias.getText(),
             sexo,
             jFormattedTextFieldCpf.getText(),
             jTextFieldNome.getText())){
-        this.getListaPaciente();
+        this.getListaPacientes();
         limpaCampos();
         JOptionPane.showMessageDialog(this, "Paciente salvo com sucesso!");
         }else{
@@ -293,8 +365,18 @@ public class CadastraPacienteView extends javax.swing.JFrame {
         else
             JOptionPane.showMessageDialog(this, "Selecione o sexo do paciente!");
         
-        if(jTablePacientes.getSelectedRow() != -1){
-            if(pacientecontroller.update((int) jTablePacientes.getValueAt(jTablePacientes.getSelectedRow(), 0),
+        if (pacienteController.update(idPaciente, jTextFieldNome.getText(), jFormattedTextFieldCpf.getText(), jFormattedTextFieldTelefone.getText(),
+                                        jFormattedTextFieldTelefone.getText(), jTextFieldAlergias.getText(), sexo)){
+            JOptionPane.showMessageDialog(this, "Paciente atualizado com sucesso!");
+        }else{
+            JOptionPane.showMessageDialog(this, "Não foi possível atualizar o paciente!", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        this.getListaPacientes();
+        limpaCampos();
+        
+        /*if(jTablePacientes.getSelectedRow() != -1){
+            if(pacienteController.update((int) jTablePacientes.getValueAt(jTablePacientes.getSelectedRow(), 0),
                                          jFormattedTextFieldTelefone.getText(),
                                          jFormattedTextFieldDataNascimento.getText(),
                                          jTextFieldAlergias.getText(),
@@ -307,11 +389,19 @@ public class CadastraPacienteView extends javax.swing.JFrame {
             }else{
                 JOptionPane.showMessageDialog(this, "Não foi possível atualizar o paciente!", "Erro", JOptionPane.ERROR_MESSAGE);
             }
-        }
+        }*/
     }//GEN-LAST:event_btnAtualizarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        if(jTablePacientes.getSelectedRow() != -1){
+        if (pacienteController.delete(idPaciente)){
+            JOptionPane.showMessageDialog(this, "Paciente deletado com sucesso!");
+        }else {
+            JOptionPane.showMessageDialog(this, "Não foi possível deletar o paciente!", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        this.getListaPacientes();
+        limpaCampos();
+        
+        /*if(jTablePacientes.getSelectedRow() != -1){
             if(pacientecontroller.delete((int) jTablePacientes.getValueAt(jTablePacientes.getSelectedRow(), 0))){
                 getListaPaciente();
                 limpaCampos();
@@ -321,8 +411,69 @@ public class CadastraPacienteView extends javax.swing.JFrame {
             }
         }else{
             JOptionPane.showMessageDialog(null, "Selecione um paciente para excluir");
-        }
+        }*/
     }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        btnCadastrar.setEnabled(true);
+        btnAtualizar.setEnabled(false);
+        btnCancelar.setEnabled(false);
+        btnExcluir.setEnabled(false);
+        alterar = false;
+        limpaCampos();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void cbBuscaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbBuscaActionPerformed
+        jTextFieldBusca.setText("");
+        if (cbBusca.getSelectedIndex() == 0){
+            tableModel = new PacienteTableModel(pacienteController.read());
+            jTablePacientes.setModel(tableModel);
+        }
+        jTextFieldBusca.requestFocus();
+    }//GEN-LAST:event_cbBuscaActionPerformed
+
+    private void jTablePacientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTablePacientesMouseClicked
+        tableModel = (PacienteTableModel) jTablePacientes.getModel();
+        Paciente paciente = tableModel.getPaciente(jTablePacientes.getSelectedRow());
+        idPaciente = paciente.getId();
+        jTextFieldNome.setText(paciente.getNome());
+        jFormattedTextFieldCpf.setText(paciente.getCpf());
+        jFormattedTextFieldTelefone.setText(paciente.getTelefone());
+        jFormattedTextFieldDataNascimento.setText(paciente.getDataNascimento());
+        jTextFieldAlergias.setText(paciente.getAlergias());
+        btnExcluir.setEnabled(true);
+        btnCadastrar.setEnabled(false);
+        btnCadastrar.setEnabled(true);
+        btnCancelar.setEnabled(true);
+        this.alterar = true;        
+    }//GEN-LAST:event_jTablePacientesMouseClicked
+
+    private void jTextFieldBuscaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldBuscaKeyTyped
+        String chave = jTextFieldBusca.getText(); //CORRIGIR!!
+        if (chave.equals("")){
+            chave = String.valueOf(evt.getKeyChar());
+        }else if (evt.getKeyChar() != '\b'){
+            chave = chave + evt.getKeyChar();
+        }
+        switch(cbBusca.getSelectedIndex()){
+            case 0:
+                tableModel = new PacienteTableModel(pacienteController.getPacientesNome(chave));
+                break;
+            case 1:
+                tableModel = new PacienteTableModel(pacienteController.getPacientesCpf(chave));
+                break;
+        }
+        jTablePacientes.setModel(tableModel);
+    }//GEN-LAST:event_jTextFieldBuscaKeyTyped
+
+    private void jTextFieldNomeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldNomeKeyTyped
+        if (alterar){
+            btnCadastrar.setEnabled(true);
+            btnAtualizar.setEnabled(true);
+            btnExcluir.setEnabled(false);
+            btnCancelar.setEnabled(true);
+        }        
+    }//GEN-LAST:event_jTextFieldNomeKeyTyped
 
     /**
      * @param args the command line arguments
@@ -341,14 +492,18 @@ public class CadastraPacienteView extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CadastraPacienteView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PacienteView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CadastraPacienteView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PacienteView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CadastraPacienteView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PacienteView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CadastraPacienteView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PacienteView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -357,7 +512,7 @@ public class CadastraPacienteView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CadastraPacienteView().setVisible(true);
+                new PacienteView().setVisible(true);
             }
         });
     }
@@ -365,8 +520,10 @@ public class CadastraPacienteView extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAtualizar;
     private javax.swing.JButton btnCadastrar;
+    private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnExcluir;
     private javax.swing.ButtonGroup buttonGroupSexo;
+    private javax.swing.JComboBox<String> cbBusca;
     private javax.swing.JFormattedTextField jFormattedTextFieldCpf;
     private javax.swing.JFormattedTextField jFormattedTextFieldDataNascimento;
     private javax.swing.JFormattedTextField jFormattedTextFieldTelefone;
@@ -383,6 +540,7 @@ public class CadastraPacienteView extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTablePacientes;
     private javax.swing.JTextField jTextFieldAlergias;
+    private javax.swing.JTextField jTextFieldBusca;
     private javax.swing.JTextField jTextFieldNome;
     // End of variables declaration//GEN-END:variables
 }

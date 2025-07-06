@@ -25,6 +25,16 @@ public class PacienteController {
         return pacientedao.read();
     }
     
+    public ArrayList<Paciente> getPacientesNome(String nome){
+        PacienteDAO pacienteDAO = new PacienteDAO();
+        return pacienteDAO.getPacientesNome(nome);
+    }
+    
+    public ArrayList<Paciente> getPacientesCpf(String cpf){
+        PacienteDAO pacienteDAO = new PacienteDAO();
+        return pacienteDAO.getPacientesCpf(cpf);
+    }
+    
     public boolean update(int id, String telefone, String dataNascimento, String alergias, String sexo, String cpf, String nome){
         Paciente paciente = new Paciente();
         paciente.setId(id);

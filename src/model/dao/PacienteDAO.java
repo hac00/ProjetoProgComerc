@@ -42,7 +42,7 @@ public class PacienteDAO {
     public ArrayList<Paciente> read() {
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        ArrayList<Paciente> ListaPacientes = new ArrayList<>();
+        ArrayList<Paciente> listaPacientes = new ArrayList<>();
         try{
             stmt = con.prepareStatement("SELECT * FROM paciente ORDER by id");
             rs = stmt.executeQuery();
@@ -55,14 +55,70 @@ public class PacienteDAO {
                 paciente.setNome(rs.getString("nome"));
                 paciente.setSexo(rs.getString("sexo"));
                 paciente.setTelefone(rs.getString("telefone"));
-                ListaPacientes.add(paciente);
+                listaPacientes.add(paciente);
             }
         } catch(SQLException ex){
             JOptionPane.showMessageDialog(null, "Erro ao ler os Pacientes: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         } finally{
             ConnectionFactory.closeConnection(con, stmt, rs);
         }
-        return ListaPacientes;
+        return listaPacientes;
+    }
+    
+        public ArrayList<Paciente> getPacientesNome(String nome) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        ArrayList<Paciente> listaPacientes = new ArrayList<>();
+
+        try {
+            stmt = con.prepareStatement("SELECT * FROM paciente WHERE nome ILIKE ? ORDER by id");
+            stmt.setString(1, "%" + nome + "%");
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                Paciente paciente = new Paciente();
+                paciente.setId(rs.getInt("id"));
+                paciente.setCpf(rs.getString("cpf"));
+                paciente.setAlergias(rs.getString("alergias"));
+                paciente.setDataNascimento(rs.getString("data_nascimento"));
+                paciente.setNome(rs.getString("nome"));
+                paciente.setSexo(rs.getString("sexo"));
+                paciente.setTelefone(rs.getString("telefone"));
+                listaPacientes.add(paciente);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao ler os Pacientes: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return listaPacientes;
+    }
+
+    public ArrayList<Paciente> getPacientesCpf(String cpf) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        ArrayList<Paciente> listaPacientes = new ArrayList<>();
+
+        try {
+            stmt = con.prepareStatement("SELECT * FROM paciente WHERE cpf ILIKE ? ORDER by id");
+            stmt.setString(1, "%" + cpf + "%");
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                Paciente paciente = new Paciente();
+                paciente.setId(rs.getInt("id"));
+                paciente.setCpf(rs.getString("cpf"));
+                paciente.setAlergias(rs.getString("alergias"));
+                paciente.setDataNascimento(rs.getString("data_nascimento"));
+                paciente.setNome(rs.getString("nome"));
+                paciente.setSexo(rs.getString("sexo"));
+                paciente.setTelefone(rs.getString("telefone"));
+                listaPacientes.add(paciente);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao ler os Pacientes: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return listaPacientes;
     }
     
     public boolean update(Paciente paciente){
