@@ -8,6 +8,7 @@ import connection.ConnectionFactory;
 import java.util.ArrayList;
 import model.bean.ProfissionalSaude;
 import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 
 public class ProfissionalSaudeDAO {
     
@@ -52,6 +53,81 @@ public class ProfissionalSaudeDAO {
         } catch(SQLException ex){
             System.err.println("Erro ao ler: " + ex);
         } finally{
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return listaProfissionalSaude;
+    }
+    
+    public ArrayList<ProfissionalSaude> getProfissionalNome(String nome) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        ArrayList<ProfissionalSaude> listaProfissionalSaude = new ArrayList<>();
+
+        try {
+            stmt = con.prepareStatement("SELECT * FROM profissional_saude WHERE nome ILIKE ? ORDER by id");
+            stmt.setString(1, "%" + nome + "%");
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                ProfissionalSaude profissionalsaude = new ProfissionalSaude();
+                profissionalsaude.setRegistroProfissional(rs.getString("registro_profissional"));
+                profissionalsaude.setId(rs.getInt("id"));
+                profissionalsaude.setCpf(rs.getString("cpf"));
+                profissionalsaude.setNome(rs.getString("nome"));
+                listaProfissionalSaude.add(profissionalsaude);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao ler os Profissionais: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return listaProfissionalSaude;
+    }
+
+    public ArrayList<ProfissionalSaude> getProfissionalCpf(String cpf) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        ArrayList<ProfissionalSaude> listaProfissionalSaude = new ArrayList<>();
+
+        try {
+            stmt = con.prepareStatement("SELECT * FROM profissional_saude WHERE cpf ILIKE ? ORDER by id");
+            stmt.setString(1, "%" + cpf + "%");
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                ProfissionalSaude profissionalsaude = new ProfissionalSaude();
+                profissionalsaude.setRegistroProfissional(rs.getString("registro_profissional"));
+                profissionalsaude.setId(rs.getInt("id"));
+                profissionalsaude.setCpf(rs.getString("cpf"));
+                profissionalsaude.setNome(rs.getString("nome"));
+                listaProfissionalSaude.add(profissionalsaude);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao ler os profissionais: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return listaProfissionalSaude;
+    }
+
+    public ArrayList<ProfissionalSaude> getProfissionalRegistro(String registro) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        ArrayList<ProfissionalSaude> listaProfissionalSaude = new ArrayList<>();
+
+        try {
+            stmt = con.prepareStatement("SELECT * FROM profissional_saude WHERE registro_profissional ILIKE ? ORDER by id");
+            stmt.setString(1, "%" + registro + "%");
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                ProfissionalSaude profissionalsaude = new ProfissionalSaude();
+                profissionalsaude.setRegistroProfissional(rs.getString("registro_profissional"));
+                profissionalsaude.setId(rs.getInt("id"));
+                profissionalsaude.setCpf(rs.getString("cpf"));
+                profissionalsaude.setNome(rs.getString("nome"));
+                listaProfissionalSaude.add(profissionalsaude);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao ler os profissionais: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } finally {
             ConnectionFactory.closeConnection(con, stmt, rs);
         }
         return listaProfissionalSaude;

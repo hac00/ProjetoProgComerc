@@ -21,6 +21,21 @@ public class ProfissionalSaudeController {
         return profissionalsaudedao.read();
     }
     
+    public ArrayList<ProfissionalSaude> getProfissionalNome(String nome){
+        ProfissionalSaudeDAO profissionalsaudedao = new ProfissionalSaudeDAO();
+        return profissionalsaudedao.getProfissionalNome(nome);
+    }
+    
+    public ArrayList<ProfissionalSaude> getProfissionalCpf(String cpf){
+        ProfissionalSaudeDAO profissionalsaudedao = new ProfissionalSaudeDAO();
+        return profissionalsaudedao.getProfissionalCpf(cpf);
+    }
+    
+    public ArrayList<ProfissionalSaude> getProfissionalRegistro(String registro){
+        ProfissionalSaudeDAO profissionalsaudedao = new ProfissionalSaudeDAO();
+        return profissionalsaudedao.getProfissionalRegistro(registro);
+    }
+    
     public boolean update(int id, String cpf, String registroProfissional, String nome){
         ProfissionalSaude profissionalsaude = new ProfissionalSaude();
         profissionalsaude.setId(id);

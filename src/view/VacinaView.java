@@ -35,7 +35,6 @@ public class VacinaView extends javax.swing.JFrame {
         jTextFieldFabricante.setText(vacina.getFabricante());
         jTextFieldDosesNecessarias.setText(String.valueOf(vacina.getDosesNecessarias()));
         jButtonCadastrar.setEnabled(false);
-        jButtonCadastrar.setEnabled(false);
         jButtonExcluir.setEnabled(true);
         this.alterar = true;
     }
