@@ -41,4 +41,9 @@ public class Vacina {
         this.dosesNecessarias = dosesNecessarias;
     }
     
+    @Override
+    public String toString(){
+        return nome;
+    }
+    
 }

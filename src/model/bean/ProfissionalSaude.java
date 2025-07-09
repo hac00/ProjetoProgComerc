@@ -1,4 +1,3 @@
-
 package model.bean;
 
 public class ProfissionalSaude {
@@ -39,6 +38,11 @@ public class ProfissionalSaude {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+    
+    @Override
+    public String toString(){
+        return nome;
     }
     
 }

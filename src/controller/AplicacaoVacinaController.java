@@ -21,9 +21,9 @@ public class AplicacaoVacinaController {
         return aplicacaoVacinaDAO.create(aplicacaoVacina);
     }
     
-    public ArrayList<AplicacaoVacina> getAplicacaoVacina(int idvacina){
+    public ArrayList<AplicacaoVacina> getAplicacaoVacina(int pacienteId){
         AplicacaoVacinaDAO aplicacaoVacinaDAO = new AplicacaoVacinaDAO();
-        return aplicacaoVacinaDAO.getAplicacaoVacina(idvacina);
+        return aplicacaoVacinaDAO.getAplicacaoVacina(pacienteId);
     }
     
     public boolean update(Paciente paciente, ProfissionalSaude profissionalSaude, Vacina vacina, String dataAplicacao, String localAplicacao){

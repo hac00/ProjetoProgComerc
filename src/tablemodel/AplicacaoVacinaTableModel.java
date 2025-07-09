@@ -8,7 +8,7 @@ import model.bean.AplicacaoVacina;
 public class AplicacaoVacinaTableModel extends AbstractTableModel {
     
     private List<AplicacaoVacina> listaAplicacaoVacina;
-    private String[] colunas = {"Paciente", "Responsavel", "Vacina", "Data de Aplicacao", "Local de Aplicacao"};
+    private String[] colunas = {"Paciente", "Responsavel", "Vacina", "Data de Aplicacao", "Local de Aplicacao", "Doses Necessárias"};
     
     public AplicacaoVacinaTableModel(){
         listaAplicacaoVacina = new ArrayList<>();
@@ -39,9 +39,13 @@ public class AplicacaoVacinaTableModel extends AbstractTableModel {
             case 1:
                 return aplicacaoVacina.getResponsavel().getNome();
             case 2:
-                return aplicacaoVacina.getDataAplicacao();
+                return aplicacaoVacina.getVacina().getNome();
             case 3:
+                return aplicacaoVacina.getDataAplicacao();
+            case 4:
                 return aplicacaoVacina.getLocalAplicacao();
+            case 5:
+                return aplicacaoVacina.getVacina().getDosesNecessarias();
             default:
                 return "";
         }
