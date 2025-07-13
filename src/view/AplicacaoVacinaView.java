@@ -1,12 +1,18 @@
 package view;
 
+import connection.ConnectionFactory;
 import controller.AplicacaoVacinaController;
 import model.bean.Paciente;
 import controller.ProfissionalSaudeController;
 import controller.VacinaController;
+import java.sql.Connection;
 import javax.swing.JOptionPane;
 import model.bean.ProfissionalSaude;
 import model.bean.Vacina;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
 import tablemodel.AplicacaoVacinaTableModel;
 
 public class AplicacaoVacinaView extends javax.swing.JFrame {
@@ -83,6 +89,7 @@ public class AplicacaoVacinaView extends javax.swing.JFrame {
         jFormattedTextFieldData = new javax.swing.JFormattedTextField();
         jButtonCancelar = new javax.swing.JButton();
         jButtonSair = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableTabela = new javax.swing.JTable();
         jLabelAplicacoes = new javax.swing.JLabel();
@@ -153,6 +160,14 @@ public class AplicacaoVacinaView extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/print.png"))); // NOI18N
+        jButton1.setText("Imprimir");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -174,18 +189,22 @@ public class AplicacaoVacinaView extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jTextFieldLocal, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jLabelData)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabelData)
+                                    .addComponent(jButtonSair))
                                 .addGap(18, 18, 18)
-                                .addComponent(jFormattedTextFieldData))))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jButton1)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(jFormattedTextFieldData)))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(42, 42, 42)
                         .addComponent(jButtonSalvar)
                         .addGap(40, 40, 40)
                         .addComponent(jButtonExcluir)
                         .addGap(36, 36, 36)
-                        .addComponent(jButtonCancelar)
-                        .addGap(40, 40, 40)
-                        .addComponent(jButtonSair)))
+                        .addComponent(jButtonCancelar)))
                 .addContainerGap(107, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -214,7 +233,8 @@ public class AplicacaoVacinaView extends javax.swing.JFrame {
                     .addComponent(jButtonSalvar)
                     .addComponent(jButtonExcluir)
                     .addComponent(jButtonCancelar)
-                    .addComponent(jButtonSair))
+                    .addComponent(jButtonSair)
+                    .addComponent(jButton1))
                 .addGap(41, 41, 41))
         );
 
@@ -315,7 +335,24 @@ public class AplicacaoVacinaView extends javax.swing.JFrame {
         jButtonSalvar.setEnabled(false);
     }//GEN-LAST:event_jTableTabelaMouseClicked
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Connection con = ConnectionFactory.getConnection();
+        
+        String src = "src/reports/vacinacao.jasper";
+        
+        JasperPrint jasperPrint = null;
+        
+        try{
+            jasperPrint = JasperFillManager.fillReport(src, null, con);
+        }catch(JRException ex){
+            System.out.println("Erro ao gerar relatorio de vacinas do paciente: " + ex);
+        }
+        JasperViewer view = new JasperViewer(jasperPrint, false);
+        view.setVisible(true);        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonCancelar;
     private javax.swing.JButton jButtonExcluir;
     private javax.swing.JButton jButtonSair;

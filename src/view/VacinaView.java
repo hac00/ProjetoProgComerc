@@ -1,9 +1,15 @@
 package view;
 
+import connection.ConnectionFactory;
 import controller.VacinaController;
 import javax.swing.JOptionPane;
 import model.bean.Vacina;
 import tablemodel.VacinaTableModel;
+import java.sql.Connection;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
 
 public class VacinaView extends javax.swing.JFrame {
 
@@ -70,6 +76,7 @@ public class VacinaView extends javax.swing.JFrame {
         jButtonExcluir = new javax.swing.JButton();
         jScrollPanelTabela = new javax.swing.JScrollPane();
         jTableTabela = new javax.swing.JTable();
+        jButtonImprimir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -164,6 +171,14 @@ public class VacinaView extends javax.swing.JFrame {
         });
         jScrollPanelTabela.setViewportView(jTableTabela);
 
+        jButtonImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/print.png"))); // NOI18N
+        jButtonImprimir.setText("Imprimir");
+        jButtonImprimir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonImprimirActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -195,7 +210,10 @@ public class VacinaView extends javax.swing.JFrame {
                                 .addComponent(jButtonExcluir))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(66, 66, 66)
-                        .addComponent(jScrollPanelTabela, javax.swing.GroupLayout.PREFERRED_SIZE, 718, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPanelTabela, javax.swing.GroupLayout.PREFERRED_SIZE, 718, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(374, 374, 374)
+                        .addComponent(jButtonImprimir)))
                 .addContainerGap(107, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -225,7 +243,9 @@ public class VacinaView extends javax.swing.JFrame {
                     .addComponent(jButtonAtualizar)
                     .addComponent(jButtonExcluir)
                     .addComponent(jButtonCancelar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 93, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jButtonImprimir)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addComponent(jScrollPanelTabela, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(24, 24, 24))
         );
@@ -344,6 +364,22 @@ public class VacinaView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTextFieldDosesNecessariasKeyTyped
 
+    private void jButtonImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonImprimirActionPerformed
+        Connection con = ConnectionFactory.getConnection();
+        
+        String src = "src/vacinas.jasper";
+        
+        JasperPrint jasperPrint = null;
+        
+        try{
+            jasperPrint = JasperFillManager.fillReport(src, null, con);
+        }catch(JRException ex){
+            System.out.println("Erro ao gerar relatorio de vacinas: " + ex);
+        }
+        JasperViewer view = new JasperViewer(jasperPrint, false);
+        view.setVisible(true);
+    }//GEN-LAST:event_jButtonImprimirActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -384,6 +420,7 @@ public class VacinaView extends javax.swing.JFrame {
     private javax.swing.JButton jButtonCadastrar;
     private javax.swing.JButton jButtonCancelar;
     private javax.swing.JButton jButtonExcluir;
+    private javax.swing.JButton jButtonImprimir;
     private javax.swing.JComboBox<String> jComboBoxBusca;
     private javax.swing.JLabel jLabelDosesNecessarias;
     private javax.swing.JLabel jLabelFabricante;

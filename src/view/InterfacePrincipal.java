@@ -2,6 +2,7 @@ package view;
 
 import view.PacienteView;
 import view.ProfissionalSaudeView;
+import view.VacinaView;
 
 public class InterfacePrincipal extends javax.swing.JFrame {
 
@@ -22,7 +23,6 @@ public class InterfacePrincipal extends javax.swing.JFrame {
         jButtonPacientes = new javax.swing.JButton();
         jButtonProfissionais = new javax.swing.JButton();
         jButtonVacinas = new javax.swing.JButton();
-        jButtonAplicacoesVacina = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuArquivo = new javax.swing.JMenu();
         jMenuEditar = new javax.swing.JMenu();
@@ -52,9 +52,11 @@ public class InterfacePrincipal extends javax.swing.JFrame {
 
         jButtonVacinas.setFont(new java.awt.Font("Liberation Sans", 0, 24)); // NOI18N
         jButtonVacinas.setText("Vacina");
-
-        jButtonAplicacoesVacina.setFont(new java.awt.Font("Liberation Sans", 0, 24)); // NOI18N
-        jButtonAplicacoesVacina.setText("Aplicações Vacina");
+        jButtonVacinas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonVacinasActionPerformed(evt);
+            }
+        });
 
         jMenuArquivo.setBorder(new javax.swing.border.MatteBorder(null));
         jMenuArquivo.setText("Arquivo");
@@ -85,13 +87,12 @@ public class InterfacePrincipal extends javax.swing.JFrame {
                         .addComponent(jLabelNome))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(179, 179, 179)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButtonVacinas)
-                            .addComponent(jButtonPacientes))
+                        .addComponent(jButtonPacientes)
                         .addGap(137, 137, 137)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButtonProfissionais)
-                            .addComponent(jButtonAplicacoesVacina))))
+                        .addComponent(jButtonProfissionais))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(344, 344, 344)
+                        .addComponent(jButtonVacinas)))
                 .addContainerGap(173, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -103,14 +104,9 @@ public class InterfacePrincipal extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonPacientes)
                     .addComponent(jButtonProfissionais))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(60, 60, 60)
-                        .addComponent(jButtonVacinas))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addComponent(jButtonAplicacoesVacina)))
-                .addContainerGap(96, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addComponent(jButtonVacinas)
+                .addGap(119, 119, 119))
         );
 
         pack();
@@ -130,6 +126,13 @@ public class InterfacePrincipal extends javax.swing.JFrame {
         cadastroProfissional.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButtonProfissionaisActionPerformed
+
+    private void jButtonVacinasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVacinasActionPerformed
+        new VacinaView();
+        VacinaView cadastroVacina = new VacinaView();
+        cadastroVacina.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButtonVacinasActionPerformed
 
     /**
      * @param args the command line arguments
@@ -168,7 +171,6 @@ public class InterfacePrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonAplicacoesVacina;
     private javax.swing.JButton jButtonPacientes;
     private javax.swing.JButton jButtonProfissionais;
     private javax.swing.JButton jButtonVacinas;
